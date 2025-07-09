@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ashlynn AI</title>
+  <title>DS MULTI AI</title>
   <style>
     :root {
       --bg-color: #f9fafb;
@@ -45,7 +45,7 @@
 
     header {
       background: linear-gradient(to right, #6366f1, #3b82f6);
-      padding: 1rem;
+      padding: 0.6rem 1rem;
       color: white;
       text-align: center;
       position: relative;
@@ -54,7 +54,7 @@
     #themeToggle {
       position: absolute;
       right: 1rem;
-      top: 1rem;
+      top: 0.6rem;
       background-color: var(--button-color);
       color: var(--button-text);
       border: none;
@@ -151,16 +151,16 @@
 </head>
 <body>
   <header>
-    <h1>Ashlynn AI</h1>
-    <button id="themeToggle">Toggle Theme</button>
+    <h1>DS MULTI AI</h1>
+    <button id="themeToggle">Dark Mode 🖤</button>
   </header>
 
   <main id="chat-container"></main>
 
   <div id="input-section">
     <div id="type-switch">
-      <button id="chatBtn" onclick="setMode('chat')">Chat</button>
-      <button id="imageBtn" onclick="setMode('image')">Image</button>
+      <button id="chatBtn" onclick="setMode('chat')">Chat with AI</button>
+      <button id="imageBtn" onclick="setMode('image')">Generate Image</button>
     </div>
     <select id="model"></select>
     <input type="text" id="userInput" placeholder="Enter your prompt..." />
@@ -230,8 +230,10 @@
     }
 
     themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      themeToggle.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
     });
 
     async function resolveFinalImageUrl(tmpUrl) {
@@ -266,15 +268,11 @@
               const realUrl = await resolveFinalImageUrl(tmpUrl);
               const container = document.createElement('div');
               const img = document.createElement('img');
-              const urlText = document.createElement('p');
               const download = document.createElement('a');
+              const caption = document.createElement('p');
 
               img.src = realUrl;
               img.className = 'generated';
-
-              urlText.textContent = realUrl;
-              urlText.style.fontSize = '0.8rem';
-              urlText.style.wordBreak = 'break-all';
 
               download.href = realUrl;
               download.download = 'image.png';
@@ -283,9 +281,13 @@
               download.style.marginTop = '0.5rem';
               download.style.color = 'var(--button-color)';
 
+              caption.textContent = 'Made by DS AI ❤️';
+              caption.style.marginTop = '0.5rem';
+              caption.style.fontSize = '0.85rem';
+
               container.appendChild(img);
-              container.appendChild(urlText);
               container.appendChild(download);
+              container.appendChild(caption);
               addMessage(container, 'bot');
             }
           } else {
