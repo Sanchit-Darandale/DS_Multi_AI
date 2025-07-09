@@ -157,7 +157,7 @@
 <body>
   <header>
     <h1>DS MULTI AI</h1>
-    <button id="themeToggle">Dark 🖤</button>
+    <button id="themeToggle">Dark Mode 🖤</button>
   </header>
 
   <main id="chat-container"></main>
@@ -238,7 +238,7 @@
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', newTheme);
-      themeToggle.textContent = newTheme === 'dark' ? 'Light 🤍' : 'Dark 🖤';
+      themeToggle.textContent = newTheme === 'dark' ? 'Light Mode 🤍' : 'Dark Mode 🖤';
     });
 
     async function resolveFinalImageUrl(tmpUrl) {
