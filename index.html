@@ -56,10 +56,12 @@
     #menuToggle {
       position: absolute;
       left: 1rem;
-      background-color: transparent;
+      background-color: rgba(255, 255, 255, 0.15);
       color: white;
       border: none;
-      font-size: 1.5rem;
+      padding: 0.4rem 0.6rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
       cursor: pointer;
       z-index: 1001;
     }
@@ -210,13 +212,13 @@
   <div id="overlay" onclick="closeSidebar()"></div>
 
   <header>
-    <button id="menuToggle" onclick="openSidebar()">☰</button>
+    <button id="menuToggle" onclick="openSidebar(); this.style.display='none';">☰</button>
     <h1>DS MULTI AI</h1>
     <button id="themeToggle" onclick="toggleTheme()">Dark 🖤</button>
   </header>
 
   <div id="sidebar">
-    <button class="closeBtn" onclick="closeSidebar()">✖</button>
+    <button class="closeBtn" onclick="closeSidebar(); document.getElementById('menuToggle').style.display='inline-block';">✖</button>
     <h2>About</h2>
     <p><strong>DS MULTI AI</strong> is a unified AI platform designed to let users chat, generate images, and interact with multiple powerful models from OpenAI, Google, and other open-source communities — all from one place.</p>
     <p>You can switch between <em>Chat</em> and <em>Image</em> modes to get either AI responses or AI-generated visuals. The site dynamically updates models based on your chosen mode for a clean experience.</p>
