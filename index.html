@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DS AI Chatbot</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ashlynn AI</title>
   <style>
     :root {
-      --bg-color: #ffffff;
-      --text-color: #000000;
-      --input-bg: #f0f0f0;
-      --bubble-user: #d1eaff;
-      --bubble-bot: #e2e2e2;
+      --bg-color: #f9fafb;
+      --text-color: #111827;
+      --bubble-user: #3b82f6;
+      --bubble-bot: #6b7280;
+      --input-bg: #e5e7eb;
+      --border-radius: 1rem;
     }
 
     [data-theme="dark"] {
-      --bg-color: #1e1e1e;
-      --text-color: #ffffff;
-      --input-bg: #333;
-      --bubble-user: #3b82f6;
-      --bubble-bot: #555;
+      --bg-color: #111827;
+      --text-color: #f9fafb;
+      --bubble-user: #2563eb;
+      --bubble-bot: #374151;
+      --input-bg: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       display: flex;
@@ -32,72 +37,99 @@
     }
 
     header {
+      background: linear-gradient(to right, #6366f1, #3b82f6);
       padding: 1rem;
+      color: white;
       text-align: center;
-      background: linear-gradient(45deg, #007bff, #00c6ff);
-      color: white;
       position: relative;
-    }
-
-    #chat-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-    }
-
-    .bubble {
-      max-width: 70%;
-      margin-bottom: 0.75rem;
-      padding: 0.75rem;
-      border-radius: 1rem;
-    }
-
-    .user {
-      align-self: flex-end;
-      background-color: var(--bubble-user);
-      color: #000;
-    }
-
-    .bot {
-      align-self: flex-start;
-      background-color: var(--bubble-bot);
-      color: #fff;
-    }
-
-    #input-container {
-      display: flex;
-      gap: 0.5rem;
-      padding: 1rem;
-      background-color: var(--input-bg);
-    }
-
-    #input-container select,
-    #input-container input {
-      flex: 1;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      border: none;
-    }
-
-    #sendBtn {
-      padding: 0.5rem 1rem;
-      background-color: #007bff;
-      border: none;
-      border-radius: 0.5rem;
-      color: white;
-      cursor: pointer;
     }
 
     #themeToggle {
       position: absolute;
       right: 1rem;
       top: 1rem;
-      cursor: pointer;
-      background: none;
-      border: 2px solid white;
+      background: transparent;
+      border: 1px solid white;
       padding: 0.25rem 0.5rem;
       color: white;
-      border-radius: 0.25rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bubble {
+      padding: 0.75rem;
+      border-radius: var(--border-radius);
+      margin: 0.5rem 0;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: var(--bubble-user);
+      color: white;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background-color: var(--bubble-bot);
+      color: white;
+    }
+
+    #input-section {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      gap: 0.5rem;
+      background-color: var(--input-bg);
+    }
+
+    #input-section select,
+    #input-section input,
+    #input-section button {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: none;
+    }
+
+    #input-section input {
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    #type-switch {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    #type-switch button {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    [data-theme="dark"] #type-switch button {
+      background-color: #1f2937;
+      border-color: #4b5563;
+      color: white;
+    }
+
+    img.generated {
+      max-width: 100%;
+      margin-top: 0.5rem;
+      border-radius: 0.5rem;
     }
   </style>
 </head>
@@ -106,14 +138,14 @@
     <h1>Ashlynn AI</h1>
     <button id="themeToggle">Toggle Theme</button>
   </header>
+
   <main id="chat-container"></main>
-  <div id="input-container">
-    <select id="api">
-      <option value="chat">Chat</option>
-      <option value="flux">Image - Flux</option>
-      <option value="turbo">Image - Turbo</option>
-      <option value="identify">Audio ID</option>
-    </select>
+
+  <div id="input-section">
+    <div id="type-switch">
+      <button onclick="setMode('chat')">Chat</button>
+      <button onclick="setMode('image')">Image</button>
+    </div>
     <select id="model">
       <option value="gpt-4">GPT-4</option>
       <option value="gpt-4o-mini">GPT-4o Mini</option>
@@ -121,8 +153,10 @@
       <option value="deepseek-r1">Deepseek</option>
       <option value="mixtral-8x7b">Mistral</option>
       <option value="qwen-2.5-coder-32b">Qwen Coder</option>
+      <option value="flux">Flux</option>
+      <option value="turbo">Turbo</option>
     </select>
-    <input type="text" id="userInput" placeholder="Type your message, prompt, or audio URL..." />
+    <input type="text" id="userInput" placeholder="Enter your prompt..." />
     <button id="sendBtn">Send</button>
   </div>
 
@@ -131,60 +165,72 @@
     const sendBtn = document.getElementById('sendBtn');
     const userInput = document.getElementById('userInput');
     const modelSelector = document.getElementById('model');
-    const apiSelector = document.getElementById('api');
     const themeToggle = document.getElementById('themeToggle');
 
     const BASE_URL = 'https://api.ashlynn-repo.tech';
+    let mode = 'chat';
+
+    function setMode(selectedMode) {
+      mode = selectedMode;
+    }
 
     themeToggle.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
-      document.documentElement.setAttribute(
-        'data-theme',
-        currentTheme === 'dark' ? 'light' : 'dark'
-      );
+      document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
     });
 
-    function addMessage(text, sender = 'bot') {
-      const div = document.createElement('div');
-      div.classList.add('bubble', sender);
-      div.textContent = text;
-      chatContainer.appendChild(div);
+    function addMessage(content, sender = 'bot') {
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${sender}`;
+      if (typeof content === 'string') {
+        bubble.textContent = content;
+      } else {
+        bubble.appendChild(content);
+      }
+      chatContainer.appendChild(bubble);
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     async function sendMessage() {
-      const input = userInput.value.trim();
+      const prompt = userInput.value.trim();
       const model = modelSelector.value;
-      const api = apiSelector.value;
-      if (!input) return;
+      if (!prompt) return;
 
-      addMessage(input, 'user');
+      addMessage(prompt, 'user');
       userInput.value = '';
 
       try {
-        let res, data;
-
-        if (api === 'chat') {
-          res = await fetch(`${BASE_URL}/chat/?question=${encodeURIComponent(input)}&model=${model}`);
-          data = await res.json();
+        if (mode === 'chat') {
+          const res = await fetch(`${BASE_URL}/chat/?question=${encodeURIComponent(prompt)}&model=${model}`);
+          const data = await res.json();
           addMessage(data.response || 'No response.', 'bot');
-        } else if (api === 'flux') {
-          res = await fetch(`${BASE_URL}/image/?prompt=${encodeURIComponent(input)}`);
-          data = await res.json();
-          if (data.image_urls) data.image_urls.forEach(url => addMessage(url, 'bot'));
-          else addMessage('No image generated.', 'bot');
-        } else if (api === 'turbo') {
-          res = await fetch(`${BASE_URL}/turbo?prompt=${encodeURIComponent(input)}&dimensions=square`);
-          data = await res.json();
-          if (data.image_urls) data.image_urls.forEach(url => addMessage(url, 'bot'));
-          else addMessage('No image generated.', 'bot');
-        } else if (api === 'identify') {
-          res = await fetch(`${BASE_URL}/identify?audio_url=${encodeURIComponent(input)}`);
-          data = await res.json();
-          const d = data.data || {};
-          addMessage(`🎵 Title: ${d.title || 'N/A'}\n🎤 Artist: ${d.artist || 'N/A'}\n🔗 ${d.url || ''}`, 'bot');
-        } else {
-          addMessage('Invalid API selected.', 'bot');
+        } else if (mode === 'image') {
+          const endpoint = model === 'flux' ? '/image/?prompt=' : '/turbo?prompt=';
+          const dimension = model === 'turbo' ? '&dimensions=square' : '';
+          const res = await fetch(`${BASE_URL}${endpoint}${encodeURIComponent(prompt)}${dimension}`);
+          const data = await res.json();
+
+          if (data.image_urls && data.image_urls.length > 0) {
+            data.image_urls.forEach(url => {
+              const container = document.createElement('div');
+              const img = document.createElement('img');
+              const download = document.createElement('a');
+
+              img.src = url;
+              img.className = 'generated';
+              download.href = url;
+              download.download = 'image.png';
+              download.textContent = 'Download';
+              download.style.display = 'block';
+              download.style.marginTop = '0.5rem';
+
+              container.appendChild(img);
+              container.appendChild(download);
+              addMessage(container, 'bot');
+            });
+          } else {
+            addMessage('No image generated.', 'bot');
+          }
         }
       } catch (err) {
         console.error(err);
