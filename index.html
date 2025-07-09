@@ -11,7 +11,8 @@
       --bubble-user: #3b82f6;
       --bubble-bot: #6b7280;
       --input-bg: #e5e7eb;
-      --border-radius: 1rem;
+      --button-color: #3b82f6;
+      --button-text: #ffffff;
     }
 
     [data-theme="dark"] {
@@ -20,6 +21,8 @@
       --bubble-user: #2563eb;
       --bubble-bot: #374151;
       --input-bg: #1f2937;
+      --button-color: #6366f1;
+      --button-text: #ffffff;
     }
 
     * {
@@ -48,10 +51,10 @@
       position: absolute;
       right: 1rem;
       top: 1rem;
-      background: transparent;
-      border: 1px solid white;
-      padding: 0.25rem 0.5rem;
-      color: white;
+      background-color: var(--button-color);
+      color: var(--button-text);
+      border: none;
+      padding: 0.4rem 0.8rem;
       border-radius: 0.5rem;
       cursor: pointer;
     }
@@ -66,7 +69,7 @@
 
     .bubble {
       padding: 0.75rem;
-      border-radius: var(--border-radius);
+      border-radius: 1rem;
       margin: 0.5rem 0;
       max-width: 80%;
       word-wrap: break-word;
@@ -100,9 +103,10 @@
       border: none;
     }
 
-    #input-section input {
-      width: 100%;
-      flex-grow: 1;
+    #input-section button {
+      background-color: var(--button-color);
+      color: var(--button-text);
+      cursor: pointer;
     }
 
     #type-switch {
@@ -113,23 +117,18 @@
 
     #type-switch button {
       flex: 1;
-      padding: 0.5rem;
+      padding: 0.6rem;
       border-radius: 0.5rem;
-      border: 1px solid #ccc;
-      background-color: white;
+      background-color: var(--button-color);
+      color: var(--button-text);
+      border: none;
       cursor: pointer;
-    }
-
-    [data-theme="dark"] #type-switch button {
-      background-color: #1f2937;
-      border-color: #4b5563;
-      color: white;
     }
 
     img.generated {
       max-width: 100%;
-      margin-top: 0.5rem;
       border-radius: 0.5rem;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
@@ -159,11 +158,11 @@
       { value: 'gemini-1.5-flash', label: 'Gemini Flash' },
       { value: 'deepseek-r1', label: 'Deepseek' },
       { value: 'mixtral-8x7b', label: 'Mistral' },
-      { value: 'qwen-2.5-coder-32b', label: 'Qwen Coder' },
+      { value: 'qwen-2.5-coder-32b', label: 'Qwen Coder' }
     ];
     const imageModels = [
       { value: 'flux', label: 'Flux' },
-      { value: 'turbo', label: 'Turbo' },
+      { value: 'turbo', label: 'Turbo' }
     ];
 
     let mode = 'chat';
@@ -208,9 +207,13 @@
     });
 
     async function resolveFinalImageUrl(tmpUrl) {
-      const html = await fetch(tmpUrl).then(res => res.text());
-      const match = html.match(/href=\"(https:\/\/[^\"]+)\"/);
-      return match ? match[1] : tmpUrl;
+      try {
+        const html = await fetch(tmpUrl).then(res => res.text());
+        const match = html.match(/id="download-button".*?href=\"(.*?)\"/);
+        return match ? match[1] : tmpUrl;
+      } catch (err) {
+        return tmpUrl;
+      }
     }
 
     async function sendMessage() {
@@ -252,7 +255,7 @@
               download.textContent = 'Download Image';
               download.style.display = 'inline-block';
               download.style.marginTop = '0.5rem';
-              download.style.color = '#3b82f6';
+              download.style.color = 'var(--button-color)';
 
               container.appendChild(img);
               container.appendChild(urlText);
