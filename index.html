@@ -164,11 +164,11 @@
 
   <div id="input-section">
     <div id="type-switch">
-      <button id="chatBtn" onclick="setMode('chat')">Chat</button>
-      <button id="imageBtn" onclick="setMode('image')">Image</button>
+      <button id="chatBtn" onclick="setMode('chat')">Chat with AI</button>
+      <button id="imageBtn" onclick="setMode('image')">Generate Image</button>
     </div>
     <select id="model"></select>
-    <input type="text" id="userInput" placeholder="Enter your prompt..." />
+    <input type="text" id="userInput" placeholder="Enter your prompt here..." />
     <button id="sendBtn">Send</button>
   </div>
 
@@ -185,8 +185,8 @@
       { value: 'qwen-2.5-coder-32b', label: 'Qwen Coder' }
     ];
     const imageModels = [
-      { value: 'flux', label: 'Flux' },
-      { value: 'turbo', label: 'Turbo' }
+      { value: 'flux', label: 'Flux AI' },
+      { value: 'turbo', label: 'Turbo AI' }
     ];
 
     let mode = 'chat';
