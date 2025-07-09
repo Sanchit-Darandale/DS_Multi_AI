@@ -56,12 +56,10 @@
     #menuToggle {
       position: absolute;
       left: 1rem;
-      background-color: var(--button-color);
-      color: var(--button-text);
+      background-color: transparent;
+      color: white;
       border: none;
-      padding: 0.4rem 0.6rem;
-      border-radius: 0.5rem;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       cursor: pointer;
       z-index: 1001;
     }
@@ -93,29 +91,36 @@
     #sidebar {
       position: fixed;
       top: 0;
-      left: -300px;
-      width: 260px;
+      left: -100%;
+      width: 280px;
       height: 100%;
       background-color: var(--input-bg);
       color: var(--text-color);
       padding: 1rem;
       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
       z-index: 1000;
-      transition: left 0.3s ease;
+      transition: left 0.4s ease-in-out;
+      overflow-y: auto;
     }
 
     #sidebar.open {
       left: 0;
     }
 
-    #sidebar h2 {
-      margin-top: 0;
+    #sidebar h2, #sidebar h3 {
+      margin-top: 1rem;
+      color: var(--text-color);
+    }
+
+    #sidebar p, #sidebar li {
+      line-height: 1.5;
+      font-size: 0.95rem;
     }
 
     #sidebar button.closeBtn {
       background-color: transparent;
       border: none;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       color: var(--text-color);
       float: right;
       cursor: pointer;
@@ -213,14 +218,16 @@
   <div id="sidebar">
     <button class="closeBtn" onclick="closeSidebar()">✖</button>
     <h2>About</h2>
-    <p>DS MULTI AI is a simple yet powerful platform to access multiple AI models. You can use it to chat, code, generate images, or just explore AI capabilities!</p>
+    <p><strong>DS MULTI AI</strong> is a unified AI platform designed to let users chat, generate images, and interact with multiple powerful models from OpenAI, Google, and other open-source communities — all from one place.</p>
+    <p>You can switch between <em>Chat</em> and <em>Image</em> modes to get either AI responses or AI-generated visuals. The site dynamically updates models based on your chosen mode for a clean experience.</p>
     <h3>Supported Models</h3>
     <ul>
-      <li><strong>Text:</strong> GPT-4, GPT-4o Mini, Gemini, Deepseek, Mistral, Qwen Coder</li>
+      <li><strong>Chat:</strong> GPT-4, GPT-4o Mini, Gemini, Deepseek, Mistral, Qwen Coder</li>
       <li><strong>Image:</strong> Flux AI, Turbo AI</li>
     </ul>
     <h2>Developer</h2>
-    <p>Made with ❤️ by <strong>Sanchit</strong>. Built using vanilla HTML, CSS, JS, and APIs from <a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn Repo</a>.</p>
+    <p>This site is proudly crafted and maintained by <strong>Sanchit</strong>. Built from scratch using HTML, CSS, and JavaScript (no frameworks), it aims to be lightweight, fast, and accessible on all devices.</p>
+    <p>Integrations are powered by the <a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn AI API</a>. It’s designed for students, developers, designers, and the curious — to learn, create, and explore AI easily.</p>
   </div>
 
   <main id="chat-container"></main>
@@ -263,4 +270,4 @@
     }
   </script>
 </body>
-      </html>
+</html>
