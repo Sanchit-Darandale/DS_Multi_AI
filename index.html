@@ -13,6 +13,8 @@
       --input-bg: #e5e7eb;
       --button-color: #3b82f6;
       --button-text: #ffffff;
+      --selected-tab: #3b82f6;
+      --unselected-tab: #cbd5e1;
     }
 
     [data-theme="dark"] {
@@ -23,6 +25,8 @@
       --input-bg: #1f2937;
       --button-color: #6366f1;
       --button-text: #ffffff;
+      --selected-tab: #6366f1;
+      --unselected-tab: #4b5563;
     }
 
     * {
@@ -119,16 +123,29 @@
       flex: 1;
       padding: 0.6rem;
       border-radius: 0.5rem;
-      background-color: var(--button-color);
-      color: var(--button-text);
       border: none;
       cursor: pointer;
+      background-color: var(--unselected-tab);
+      color: var(--text-color);
+    }
+
+    #type-switch button.active {
+      background-color: var(--selected-tab);
+      color: white;
     }
 
     img.generated {
       max-width: 100%;
       border-radius: 0.5rem;
       margin-top: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--text-color);
+      background-color: var(--input-bg);
     }
   </style>
 </head>
@@ -142,13 +159,15 @@
 
   <div id="input-section">
     <div id="type-switch">
-      <button onclick="setMode('chat')">Chat</button>
-      <button onclick="setMode('image')">Image</button>
+      <button id="chatBtn" onclick="setMode('chat')">Chat</button>
+      <button id="imageBtn" onclick="setMode('image')">Image</button>
     </div>
     <select id="model"></select>
     <input type="text" id="userInput" placeholder="Enter your prompt..." />
     <button id="sendBtn">Send</button>
   </div>
+
+  <footer>Made With ❤️ By Sanchit</footer>
 
   <script>
     const BASE_URL = 'https://api.ashlynn-repo.tech';
@@ -166,6 +185,7 @@
     ];
 
     let mode = 'chat';
+    let loadingBubble = null;
 
     const chatContainer = document.getElementById('chat-container');
     const sendBtn = document.getElementById('sendBtn');
@@ -187,6 +207,13 @@
     function setMode(selectedMode) {
       mode = selectedMode;
       populateModels();
+      document.getElementById('chatBtn').classList.remove('active');
+      document.getElementById('imageBtn').classList.remove('active');
+      if (mode === 'chat') {
+        document.getElementById('chatBtn').classList.add('active');
+      } else {
+        document.getElementById('imageBtn').classList.add('active');
+      }
     }
 
     function addMessage(content, sender = 'bot') {
@@ -199,6 +226,7 @@
       }
       chatContainer.appendChild(bubble);
       chatContainer.scrollTop = chatContainer.scrollHeight;
+      return bubble;
     }
 
     themeToggle.addEventListener('click', () => {
@@ -207,13 +235,8 @@
     });
 
     async function resolveFinalImageUrl(tmpUrl) {
-      try {
-        const html = await fetch(tmpUrl).then(res => res.text());
-        const match = html.match(/id="download-button".*?href=\"(.*?)\"/);
-        return match ? match[1] : tmpUrl;
-      } catch (err) {
-        return tmpUrl;
-      }
+      const finalUrl = tmpUrl.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+      return finalUrl;
     }
 
     async function sendMessage() {
@@ -223,17 +246,20 @@
 
       addMessage(prompt, 'user');
       userInput.value = '';
+      loadingBubble = addMessage('Just a second...', 'bot');
 
       try {
         if (mode === 'chat') {
           const res = await fetch(`${BASE_URL}/chat/?question=${encodeURIComponent(prompt)}&model=${model}`);
           const data = await res.json();
+          loadingBubble.remove();
           addMessage(data.response || 'No response.', 'bot');
         } else if (mode === 'image') {
           const endpoint = model === 'flux' ? '/image/?prompt=' : '/turbo?prompt=';
           const dimension = model === 'turbo' ? '&dimensions=square' : '';
           const res = await fetch(`${BASE_URL}${endpoint}${encodeURIComponent(prompt)}${dimension}`);
           const data = await res.json();
+          loadingBubble.remove();
 
           if (data.image_urls && data.image_urls.length > 0) {
             for (const tmpUrl of data.image_urls) {
@@ -268,6 +294,7 @@
         }
       } catch (err) {
         console.error(err);
+        if (loadingBubble) loadingBubble.remove();
         addMessage('Error: Unable to get response.', 'bot');
       }
     }
@@ -277,7 +304,6 @@
       if (e.key === 'Enter') sendMessage();
     });
 
-    // Initialize
     setMode('chat');
   </script>
 </body>
