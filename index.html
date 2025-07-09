@@ -41,29 +41,29 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      transition: filter 0.3s ease;
-    }
-
-    #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-      z-index: 998;
-      display: none;
     }
 
     header {
       background: linear-gradient(to right, #6366f1, #3b82f6);
-      padding: 0.4rem 1rem;
+      padding: 0.6rem 1rem;
       color: white;
-      text-align: center;
-      position: relative;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #menuToggle {
+      position: absolute;
+      left: 1rem;
+      background-color: var(--button-color);
+      color: var(--button-text);
+      border: none;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 1001;
     }
 
     #themeToggle {
@@ -76,41 +76,32 @@
       border-radius: 0.5rem;
       cursor: pointer;
       font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 1001;
     }
 
-    #menuToggle {
-      position: absolute;
-      left: 1rem;
-      top: 0.4rem;
-      background-color: var(--button-color);
-      color: var(--button-text);
-      border: none;
-      padding: 0.5rem 0.7rem;
-      border-radius: 0.5rem;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
     }
 
     #sidebar {
       position: fixed;
       top: 0;
       left: -300px;
-      width: 300px;
+      width: 260px;
       height: 100%;
       background-color: var(--input-bg);
       color: var(--text-color);
       padding: 1rem;
-      transition: left 0.3s ease-in-out;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-      z-index: 999;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: left 0.3s ease;
     }
 
     #sidebar.open {
@@ -158,6 +149,49 @@
       color: white;
     }
 
+    #input-section {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      gap: 0.5rem;
+      background-color: var(--input-bg);
+    }
+
+    #input-section select,
+    #input-section input,
+    #input-section button {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: none;
+    }
+
+    #input-section button {
+      background-color: var(--button-color);
+      color: var(--button-text);
+      cursor: pointer;
+    }
+
+    #type-switch {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    #type-switch button {
+      flex: 1;
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      background-color: var(--unselected-tab);
+      color: var(--text-color);
+    }
+
+    #type-switch button.active {
+      background-color: var(--selected-tab);
+      color: white;
+    }
+
     footer {
       text-align: center;
       padding: 0.75rem;
@@ -165,75 +199,68 @@
       color: var(--text-color);
       background-color: var(--input-bg);
     }
-
-    a {
-      color: var(--button-color);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
-  <div id="overlay"></div>
+  <div id="overlay" onclick="closeSidebar()"></div>
 
   <header>
-    <button id="menuToggle">☰</button>
+    <button id="menuToggle" onclick="openSidebar()">☰</button>
     <h1>DS MULTI AI</h1>
-    <button id="themeToggle">Dark 🖤</button>
+    <button id="themeToggle" onclick="toggleTheme()">Dark 🖤</button>
   </header>
 
   <div id="sidebar">
     <button class="closeBtn" onclick="closeSidebar()">✖</button>
     <h2>About</h2>
-    <p>DS MULTI AI is a smart assistant that combines the power of multiple advanced AI models for both chatting and image generation. Simply choose a type (chat/image), pick your model, and let the AI handle your prompt!</p>
+    <p>DS MULTI AI is a simple yet powerful platform to access multiple AI models. You can use it to chat, code, generate images, or just explore AI capabilities!</p>
+    <h3>Supported Models</h3>
     <ul>
-      <li>🎯 Easy model switching</li>
-      <li>🧠 AI chat & 🎨 image generation</li>
-      <li>🌓 Light/Dark themes</li>
-      <li>⚡ Fast response using Ashlynn API</li>
+      <li><strong>Text:</strong> GPT-4, GPT-4o Mini, Gemini, Deepseek, Mistral, Qwen Coder</li>
+      <li><strong>Image:</strong> Flux AI, Turbo AI</li>
     </ul>
-
     <h2>Developer</h2>
-    <p>This site is proudly built and maintained by <strong>Sanchit</strong> ❤️</p>
-    <p>It uses pure HTML, CSS, and JS with no frameworks. Perfectly responsive, smooth animations, and seamless API integration make it a lightweight yet powerful AI playground.</p>
-    <p>API credits: <a href="https://t.me/Ashlynn_Repository" target="_blank">@Ashlynn_Repository</a></p>
+    <p>Made with ❤️ by <strong>Sanchit</strong>. Built using vanilla HTML, CSS, JS, and APIs from <a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn Repo</a>.</p>
   </div>
 
-  <script>
-    const overlay = document.getElementById('overlay');
-    const sidebar = document.getElementById('sidebar');
-    const menuToggle = document.getElementById('menuToggle');
-    const themeToggle = document.getElementById('themeToggle');
+  <main id="chat-container"></main>
 
+  <div id="input-section">
+    <div id="type-switch">
+      <button id="chatBtn" onclick="setMode('chat')">Chat with AI</button>
+      <button id="imageBtn" onclick="setMode('image')">Generate Image</button>
+    </div>
+    <select id="model">
+      <option value="gpt-4">GPT-4</option>
+    </select>
+    <input type="text" id="userInput" placeholder="Enter your prompt here..." />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <footer>Made With ❤️ By Sanchit</footer>
+
+  <script>
     function openSidebar() {
-      sidebar.classList.add('open');
-      overlay.style.display = 'block';
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('overlay').style.display = 'block';
     }
 
     function closeSidebar() {
-      sidebar.classList.remove('open');
-      overlay.style.display = 'none';
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').style.display = 'none';
     }
 
-    function updateThemeText() {
-      const theme = document.documentElement.getAttribute('data-theme') || 'light';
-      themeToggle.textContent = theme === 'dark' ? 'Light 🤍' : 'Dark 🖤';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeToggle').textContent = isDark ? 'Dark 🖤' : 'Light 🤍';
     }
 
-    menuToggle.addEventListener('click', openSidebar);
-    overlay.addEventListener('click', closeSidebar);
-
-    themeToggle.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      updateThemeText();
-    });
-
-    updateThemeText();
+    function setMode(mode) {
+      document.getElementById('chatBtn').classList.toggle('active', mode === 'chat');
+      document.getElementById('imageBtn').classList.toggle('active', mode === 'image');
+    }
   </script>
 </body>
-</html>
+      </html>
