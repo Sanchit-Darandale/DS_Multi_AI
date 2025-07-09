@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DS MULTI AI</title>
   <style>
     :root {
@@ -44,10 +44,6 @@
       transition: filter 0.3s ease;
     }
 
-    body.blur {
-      filter: blur(2px);
-    }
-
     #overlay {
       position: fixed;
       top: 0;
@@ -55,13 +51,13 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.4);
-      z-index: 999;
+      z-index: 998;
       display: none;
     }
 
     header {
       background: linear-gradient(to right, #6366f1, #3b82f6);
-      padding: 0.6rem 1rem;
+      padding: 0.4rem 1rem;
       color: white;
       text-align: center;
       position: relative;
@@ -96,6 +92,9 @@
       border-radius: 0.5rem;
       font-size: 1.2rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #sidebar {
@@ -109,7 +108,7 @@
       padding: 1rem;
       transition: left 0.3s ease-in-out;
       box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-      z-index: 1000;
+      z-index: 999;
     }
 
     #sidebar.open {
@@ -213,13 +212,22 @@
       color: var(--text-color);
       background-color: var(--input-bg);
     }
+
+    a {
+      color: var(--button-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <div id="overlay"></div>
 
   <header>
-    <button id="menuToggle">☰</button>
+    <button id="menuToggle">⋮</button>
     <h1>DS MULTI AI</h1>
     <button id="themeToggle">Dark 🖤</button>
   </header>
@@ -227,23 +235,25 @@
   <div id="sidebar">
     <button class="closeBtn" onclick="closeSidebar()">✖</button>
     <h2>About</h2>
-    <p>DS MULTI AI is your personal AI hub built to explore both text-based and image-based artificial intelligence models. Whether you're looking to chat, code, generate images, or solve problems — this platform has something for everyone.</p>
-    <p>Select from a wide range of models using the dropdown. You can switch between "Chat" and "Image" using the toggle buttons. Our AI backend dynamically routes your request to the selected model and gives instant results.</p>
-    <h3>Supported Models</h3>
+    <p>DS MULTI AI is a smart assistant that combines the power of multiple advanced AI models for both chatting and image generation. Simply choose a type (chat/image), pick your model, and let the AI handle your prompt!</p>
     <ul>
-      <li><strong>Text Models:</strong> GPT-4, GPT-4o Mini, Gemini, Deepseek, Mistral, Qwen Coder</li>
-      <li><strong>Image Models:</strong> Flux AI and Turbo AI</li>
+      <li>🎯 Easy model switching</li>
+      <li>🧠 AI chat & 🎨 image generation</li>
+      <li>🌓 Light/Dark themes</li>
+      <li>⚡ Fast response using Ashlynn API</li>
     </ul>
+
     <h2>Developer</h2>
-    <p>This site is proudly developed and maintained by <strong>Sanchit</strong>. It’s designed to be modern, responsive, and user-friendly. Built using vanilla HTML, CSS, and JS, with APIs from <a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn Repository</a>.</p>
-    <p>We aim to make AI more accessible and fun for everyone — whether you're a student, developer, content creator, or just curious!</p>
+    <p>This site is proudly built and maintained by <strong>Sanchit</strong> ❤️</p>
+    <p>It uses pure HTML, CSS, and JS with no frameworks. Perfectly responsive, smooth animations, and seamless API integration make it a lightweight yet powerful AI playground.</p>
+    <p>API credits: <a href="https://t.me/Ashlynn_Repository" target="_blank">@Ashlynn_Repository</a></p>
   </div>
 
-  <!-- Rest of the page remains unchanged -->
   <script>
     const overlay = document.getElementById('overlay');
     const sidebar = document.getElementById('sidebar');
     const menuToggle = document.getElementById('menuToggle');
+    const themeToggle = document.getElementById('themeToggle');
 
     function openSidebar() {
       sidebar.classList.add('open');
@@ -255,8 +265,22 @@
       overlay.style.display = 'none';
     }
 
+    function updateThemeText() {
+      const theme = document.documentElement.getAttribute('data-theme') || 'light';
+      themeToggle.textContent = theme === 'dark' ? 'Light 🤍' : 'Dark 🖤';
+    }
+
     menuToggle.addEventListener('click', openSidebar);
     overlay.addEventListener('click', closeSidebar);
+
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      updateThemeText();
+    });
+
+    updateThemeText(); // Initial state
   </script>
 </body>
 </html>
