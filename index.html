@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DS MULTI AI</title>
   <style>
     :root {
@@ -74,10 +74,6 @@
       border-radius: 0.5rem;
       cursor: pointer;
       font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       z-index: 1001;
     }
 
@@ -228,16 +224,16 @@
   <div id="sidebar">
     <button class="closeBtn" onclick="closeSidebar()">✖</button>
     <h2>About</h2>
-    <p><strong>DS MULTI AI</strong> is a unified AI platform designed to let users chat, generate images, and interact with multiple powerful models from OpenAI, Google, and other open-source communities — all from one place.</p>
-    <p>You can switch between <em>Chat</em> and <em>Image</em> modes to get either AI responses or AI-generated visuals. The site dynamically updates models based on your chosen mode for a clean experience.</p>
+    <p><strong>DS MULTI AI</strong> is a unified AI platform to chat, generate images, and use powerful models from OpenAI, Google, and open-source labs.</p>
+    <p>Switch between <em>Chat</em> and <em>Image</em> modes with ease. Experience seamless interaction with different AI technologies in one place.</p>
     <h3>Supported Models</h3>
     <ul>
       <li><strong>Chat:</strong> GPT-4, GPT-4o Mini, Gemini, Deepseek, Mistral, Qwen Coder</li>
       <li><strong>Image:</strong> Flux AI, Turbo AI</li>
     </ul>
     <h2>Developer</h2>
-    <p>This site is proudly crafted and maintained by <strong><a href="https://github.com/Sanchit0102" target="_blank">Sanchit</a></strong>. Built from scratch using HTML, CSS, and JavaScript (no frameworks), it aims to be lightweight, fast, and accessible on all devices.</p>
-    <p>Integrations are powered by the <strong><a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn AI API</a></strong>. It’s designed for students, developers, designers, and the curious — to learn, create, and explore AI easily.</p>
+    <p>Developed and maintained by <strong>Sanchit</strong> using HTML, CSS, and JavaScript. Designed for speed, simplicity, and mobile responsiveness.</p>
+    <p>Integrated with <a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn AI API</a>. Built for developers, creators, and learners.</p>
   </div>
 
   <main id="chat-container"></main>
@@ -255,18 +251,6 @@
   <footer>Made With ❤️ By Sanchit</footer>
 
   <script>
-    function openSidebar() {
-      document.getElementById('sidebar').classList.add('open');
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('menuToggle').style.display = 'none';
-    }
-
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('overlay').style.display = 'none';
-      document.getElementById('menuToggle').style.display = 'block';
-    }
-
     const BASE_URL = 'https://api.ashlynn-repo.tech';
     const chatModels = [
       { value: 'gpt-4', label: 'GPT-4' },
@@ -304,13 +288,8 @@
     function setMode(selectedMode) {
       mode = selectedMode;
       populateModels();
-      document.getElementById('chatBtn').classList.remove('active');
-      document.getElementById('imageBtn').classList.remove('active');
-      if (mode === 'chat') {
-        document.getElementById('chatBtn').classList.add('active');
-      } else {
-        document.getElementById('imageBtn').classList.add('active');
-      }
+      document.getElementById('chatBtn').classList.toggle('active', mode === 'chat');
+      document.getElementById('imageBtn').classList.toggle('active', mode === 'image');
     }
 
     function addMessage(content, sender = 'bot') {
@@ -323,6 +302,7 @@
       }
       chatContainer.appendChild(bubble);
       chatContainer.scrollTop = chatContainer.scrollHeight;
+      saveMessages();
       return bubble;
     }
 
@@ -334,8 +314,7 @@
     });
 
     async function resolveFinalImageUrl(tmpUrl) {
-      const finalUrl = tmpUrl // .replace('tmpfiles.org/', 'tmpfiles.org/dl/');
-      return finalUrl;
+      return tmpUrl.replace('/tmpfiles.org/', '/tmpfiles.org/dl/').replace('/dl/dl/', '/dl/');
     }
 
     async function sendMessage() {
@@ -398,12 +377,47 @@
       }
     }
 
-    sendBtn.addEventListener('click', sendMessage);
+    function saveMessages() {
+      const bubbles = document.querySelectorAll('.bubble');
+      const messages = [];
+      bubbles.forEach(b => {
+        messages.push({ sender: b.classList.contains('user') ? 'user' : 'bot', html: b.innerHTML });
+      });
+      localStorage.setItem('ds-messages', JSON.stringify(messages));
+    }
+
+    function loadMessages() {
+      const saved = localStorage.getItem('ds-messages');
+      if (saved) {
+        const messages = JSON.parse(saved);
+        messages.forEach(msg => {
+          const div = document.createElement('div');
+          div.className = `bubble ${msg.sender}`;
+          div.innerHTML = msg.html;
+          chatContainer.appendChild(div);
+        });
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
     userInput.addEventListener('keypress', e => {
       if (e.key === 'Enter') sendMessage();
     });
 
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    loadMessages();
     setMode('chat');
   </script>
 </body>
-</html>
+  </html>
+                               
