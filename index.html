@@ -334,8 +334,25 @@
       themeToggle.textContent = newTheme === 'dark' ? 'Light 🤍' : 'Dark 🖤';
     });
 
+    async function sendChatWithPostAPI(prompt, model) {
+      const res = await fetch(`${BASE_URL}/v1/chat/api`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: model || "gpt-4o-mini",
+        messages: [
+          { role: "user", content: prompt }
+        ]
+      })
+    });
+    const data = await res.json();
+    return data.response || "No response.";
+    }
+    
     async function resolveFinalImageUrl(tmpUrl) {
-      return tmpUrl.replace('/tmpfiles.org/', '/tmpfiles.org/dl/').replace('/dl/dl/', '/dl/');
+      return tmpUrl.replace('/dl/dl', '/dl');
     }
 
     async function sendMessage() {
@@ -349,10 +366,9 @@
 
       try {
         if (mode === 'chat') {
-          const res = await fetch(`${BASE_URL}/chat/?question=${encodeURIComponent(prompt)}&model=${model}`);
-          const data = await res.json();
+          const response = await sendChatWithPostAPI(prompt, model);
           loadingBubble.remove();
-          addMessage(data.response || 'No response.', 'bot');
+          addMessage(response, 'bot');
         } else if (mode === 'image') {
           const endpoint = model === 'flux' ? '/image/?prompt=' : '/turbo?prompt=';
           const dimension = model === 'turbo' ? '&dimensions=square' : '';
