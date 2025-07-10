@@ -74,6 +74,10 @@
       border-radius: 0.5rem;
       cursor: pointer;
       font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       z-index: 1001;
     }
 
@@ -224,16 +228,16 @@
   <div id="sidebar">
     <button class="closeBtn" onclick="closeSidebar()">✖</button>
     <h2>About</h2>
-    <p><strong>DS MULTI AI</strong> is a unified AI platform to chat, generate images, and use powerful models from OpenAI, Google, and open-source labs.</p>
-    <p>Switch between <em>Chat</em> and <em>Image</em> modes with ease. Experience seamless interaction with different AI technologies in one place.</p>
+    <p><strong>DS MULTI AI</strong> is a unified AI platform designed to let users chat, generate images, and interact with multiple powerful models from OpenAI, Google, and other open-source communities — all from one place.</p>
+    <p>You can switch between <em>Chat</em> and <em>Image</em> modes to get either AI responses or AI-generated visuals. The site dynamically updates models based on your chosen mode for a clean experience.</p>
     <h3>Supported Models</h3>
     <ul>
       <li><strong>Chat:</strong> GPT-4, GPT-4o Mini, Gemini, Deepseek, Mistral, Qwen Coder</li>
       <li><strong>Image:</strong> Flux AI, Turbo AI</li>
     </ul>
     <h2>Developer</h2>
-    <p>Developed and maintained by <strong>Sanchit</strong> using HTML, CSS, and JavaScript. Designed for speed, simplicity, and mobile responsiveness.</p>
-    <p>Integrated with <a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn AI API</a>. Built for developers, creators, and learners.</p>
+    <p>This site is proudly crafted and maintained by <strong><a href="https://github.com/Sanchit0102" target="_blank">Sanchit</a></strong>. Built from scratch using HTML, CSS, and JavaScript (no frameworks), it aims to be lightweight, fast, and accessible on all devices.</p>
+    <p>Integrations are powered by the <strong><a href="https://t.me/Ashlynn_Repository" target="_blank">Ashlynn AI API</a></strong>. It’s designed for students, developers, designers, and the curious — to learn, create, and explore AI easily.</p>
   </div>
 
   <main id="chat-container"></main>
@@ -251,14 +255,26 @@
   <footer>Made With ❤️ By Sanchit</footer>
 
   <script>
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('menuToggle').style.display = 'none';
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('menuToggle').style.display = 'block';
+    }
+
     const BASE_URL = 'https://api.ashlynn-repo.tech';
     const chatModels = [
-      { value: 'gpt-4', label: 'GPT-4' },
-      { value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
-      { value: 'gemini-1.5-flash', label: 'Gemini Flash' },
-      { value: 'deepseek-r1', label: 'Deepseek' },
-      { value: 'mixtral-8x7b', label: 'Mistral' },
-      { value: 'qwen-2.5-coder-32b', label: 'Qwen Coder' }
+      { value: 'gpt-4', label: 'GPT-4 Model' },
+      { value: 'gpt-4o-mini', label: 'GPT-4o Mini Model' },
+      { value: 'gemini-1.5-flash', label: 'Gemini Flash AI' },
+      { value: 'deepseek-r1', label: 'Deepseek AI' },
+      { value: 'mixtral-8x7b', label: 'Mistral AI' },
+      { value: 'qwen-2.5-coder-32b', label: 'Qwen Coder AI' }
     ];
     const imageModels = [
       { value: 'flux', label: 'Flux AI' },
@@ -288,8 +304,13 @@
     function setMode(selectedMode) {
       mode = selectedMode;
       populateModels();
-      document.getElementById('chatBtn').classList.toggle('active', mode === 'chat');
-      document.getElementById('imageBtn').classList.toggle('active', mode === 'image');
+      document.getElementById('chatBtn').classList.remove('active');
+      document.getElementById('imageBtn').classList.remove('active');
+      if (mode === 'chat') {
+        document.getElementById('chatBtn').classList.add('active');
+      } else {
+        document.getElementById('imageBtn').classList.add('active');
+      }
     }
 
     function addMessage(content, sender = 'bot') {
@@ -324,7 +345,7 @@
 
       addMessage(prompt, 'user');
       userInput.value = '';
-      loadingBubble = addMessage('Just a second...', 'bot');
+      loadingBubble = addMessage('Searching...', 'bot');
 
       try {
         if (mode === 'chat') {
@@ -404,16 +425,6 @@
     userInput.addEventListener('keypress', e => {
       if (e.key === 'Enter') sendMessage();
     });
-
-    function openSidebar() {
-      document.getElementById('sidebar').classList.add('open');
-      document.getElementById('overlay').style.display = 'block';
-    }
-
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('overlay').style.display = 'none';
-    }
 
     loadMessages();
     setMode('chat');
